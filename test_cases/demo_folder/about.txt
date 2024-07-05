@@ -1,0 +1,51 @@
+1. Application Workflow
+User Selects File/Directory: The user chooses a file or directory to encrypt.
+Generate File Encryption Key (FEK): The application generates a random File Encryption Key (FEK) using a secure random number generator.
+Encrypt File/Directory: The selected file or directory is encrypted using AES-256 with the FEK.
+User Sets Passphrase: The user sets a passphrase that will protect the FEK.
+Derive Key from Passphrase: The passphrase is processed through a Key Derivation Function (KDF) to generate a key.
+Encrypt FEK: The FEK is encrypted using the key derived from the user's passphrase.
+Store Encrypted FEK: The encrypted FEK is stored in a secure file.
+Authenticate User: When the user wants to decrypt the file/directory, they provide their passphrase.
+Decrypt FEK: The passphrase is used to derive the key, which is then used to decrypt the FEK.
+Decrypt File/Directory: The decrypted FEK is used to decrypt the file or directory.
+2. High-Level Algorithm
+Encryption Phase:
+
+Generate a random FEK.
+Encrypt the selected file or directory using AES-256 with the FEK.
+Derive a key from the user passphrase using a KDF (e.g., PBKDF2).
+Encrypt the FEK with the derived key using AES-256.
+Store the encrypted FEK in a secure file.
+Decryption Phase:
+
+Prompt the user for the passphrase.
+Derive the key from the passphrase using the same KDF.
+Decrypt the FEK using the derived key.
+Decrypt the file or directory using the decrypted FEK.
+3. Justification for Crypto Algorithms
+AES-256: Provides a high level of security and is a widely accepted standard for symmetric encryption.
+Key Derivation Function (KDF) - PBKDF2: Enhances security by making brute-force attacks more difficult. It uses a passphrase, salt, and iteration count to produce a secure key.
+Secure Random Number Generator: Ensures the FEK is unpredictable and secure.
+4. Open Source and System Routines
+Cryptography Library: Use libraries such as cryptography in Python, which provides implementations for AES and PBKDF2.
+Secure File Handling: Use standard file I/O operations in Python, ensuring proper permissions and handling.
+Random Number Generation: Use os.urandom or secrets module in Python for generating the FEK.
+5. Test Plan
+Basic Functionality Tests:
+
+Encrypt and decrypt a small text file.
+Encrypt and decrypt a large directory.
+Edge Cases:
+
+Empty file/directory encryption and decryption.
+Very large file encryption and decryption.
+Special character handling in file names.
+Security Tests:
+
+Attempt to decrypt with an incorrect passphrase.
+Check for passphrase and FEK not being stored in plain text.
+Performance Tests:
+
+Measure time taken to encrypt and decrypt large files and directories.
+Measure performance with varying passphrase lengths.
